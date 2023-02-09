@@ -1,15 +1,11 @@
 import asyncio
+
 import requests
 
 from api.path import URL  # https://fapi.binance.com/fapi/v1/ticker/price?symbol=XRPUSDT
 
 
 max_price = 0
-
-
-async def updatedMaxPrice(current_price):
-    await asyncio.sleep(1)
-    print(f'Max Price updated to {current_price}')
 
 
 async def droppedMaxPrice(current_price):
@@ -26,22 +22,28 @@ async def maxPriceValue(current_price):
 
     if current_price > max_price:
         max_price = current_price
-        await updatedMaxPrice(current_price)
+        await asyncio.sleep(1)
+        print(f'Max Price updated to {current_price}')
+
     if (max_price - current_price) / max_price >= 0.01:
         await droppedMaxPrice(current_price)
 
 
 async def main():
-    while True:
-        response = requests.get(URL)
-        current_price = float(response.json()['price'])
+    try:
+        while True:
+            response = requests.get(URL)
+            current_price = float(response.json()['price'])
 
-        await asyncio.sleep(1)
-        print(f'Current price: {current_price}')
+            await asyncio.sleep(1)
+            print(f'Current price: {current_price}')
 
-        max_price_value = asyncio.create_task(maxPriceValue(current_price))
+            max_price_value = asyncio.create_task(maxPriceValue(current_price))
 
-        await max_price_value
+            await max_price_value
+
+    except Exception as e:
+        return e
 
 
 asyncio.run(main())
