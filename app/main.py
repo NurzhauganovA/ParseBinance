@@ -19,12 +19,12 @@ async def updatedMaxPrice(current_price):
 async def droppedMaxPrice(current_price):
     global max_price
 
-    if (max_price - current_price) / max_price >= 0.0001:
+    if (max_price - current_price) / max_price >= 0.01:
         await asyncio.sleep(1)
         print(
-            f'\nThe price of XRP/USDT has dropped by 1% of the maximum price in the last hour.\n'
-            f'Current price: {current_price}\n'
-            f'Max price: {max_price}\n'
+                f'\nThe price of XRP/USDT has dropped by 1% of the maximum price in the last hour.\n'
+                f'Current price: {current_price}\n'
+                f'Max price: {max_price}\n'
             )
 
 
