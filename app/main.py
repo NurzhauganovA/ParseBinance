@@ -22,8 +22,8 @@ async def maxPriceValue(current_price):
 
     if current_price > max_price:
         max_price = current_price
-        await asyncio.sleep(1)
-        print(f'Max Price updated to {current_price}')
+        # await asyncio.sleep(1)
+        # print(f'Max Price updated to {current_price}')
 
     if (max_price - current_price) / max_price >= 0.01:
         await droppedMaxPrice(current_price)
@@ -35,8 +35,8 @@ async def main():
             response = requests.get(URL)
             current_price = float(response.json()['price'])
 
-            await asyncio.sleep(1)
-            print(f'Current price: {current_price}')
+            # await asyncio.sleep(1)
+            # print(f'Current price: {current_price}')
 
             max_price_value = asyncio.create_task(maxPriceValue(current_price))
 
