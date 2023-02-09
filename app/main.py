@@ -8,24 +8,27 @@ max_price = 0
 
 
 async def updatedMaxPrice(current_price):
+    await asyncio.sleep(1)
+    print(f'Max Price updated to {current_price}')
+
+
+async def droppedMaxPrice(current_price):
+    await asyncio.sleep(1)
+    print(
+            f'\nThe price of XRP/USDT has dropped by 1% of the maximum price in the last hour.\n'
+            f'Current price: {current_price}\n'
+            f'Max price: {max_price}\n'
+    )
+
+
+async def maxPriceValue(current_price):
     global max_price
 
     if current_price > max_price:
         max_price = current_price
-        await asyncio.sleep(1)
-        print(f'Max Price updated to {current_price}')
-
-
-async def droppedMaxPrice(current_price):
-    global max_price
-
+        await updatedMaxPrice(current_price)
     if (max_price - current_price) / max_price >= 0.01:
-        await asyncio.sleep(1)
-        print(
-                f'\nThe price of XRP/USDT has dropped by 1% of the maximum price in the last hour.\n'
-                f'Current price: {current_price}\n'
-                f'Max price: {max_price}\n'
-            )
+        await droppedMaxPrice(current_price)
 
 
 async def main():
@@ -36,8 +39,9 @@ async def main():
         await asyncio.sleep(1)
         print(f'Current price: {current_price}')
 
-        await asyncio.create_task(updatedMaxPrice(current_price))
-        await asyncio.create_task(droppedMaxPrice(current_price))
+        max_price_value = asyncio.create_task(maxPriceValue(current_price))
+
+        await max_price_value
 
 
 asyncio.run(main())
